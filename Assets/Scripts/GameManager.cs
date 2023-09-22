@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -8,16 +9,26 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool justTeleportedHorizontally;
     [SerializeField] private bool justTeleportedVertically;
     [SerializeField] private GameObject foodPrefab;
-    public static int foodCount = 1;
+    [SerializeField] private int score;
+    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private GameObject asteroidPrefab;
+    [SerializeField] private bool spawnedNegative;
+    public static bool gameOver;
+    public int foodCount = 1;
     // Start is called before the first frame update
     void Start()
     {
+        snake = GameObject.Find("Snake");
+        StartCoroutine(ScoreIncreaseRoutine());
+        StartCoroutine(AsteroidSpawnRoutine());
     }
 
     // Update is called once per frame
     void Update()
     {
         CheckSnakeTeleportation();
+        SpawnFood();
+        UpdateUI();
     }
 
     private void CheckSnakeTeleportation()
@@ -58,6 +69,39 @@ public class GameManager : MonoBehaviour
             var randomYPos = Random.Range(-9, 9);
             Instantiate(foodPrefab, new Vector2(randomXPos, randomYPos), Quaternion.identity);
             foodCount++;
+        }
+    }
+
+    public void DecreaseFoodCount()
+    {
+        foodCount--;
+        score += 100;
+    }
+
+    private IEnumerator ScoreIncreaseRoutine()
+    {
+        while (!gameOver)
+        {
+            score++;
+            yield return new WaitForSeconds(1);
+        }
+    }
+
+    private void UpdateUI()
+    {
+        scoreText.text = "Score: " + score;
+    }
+
+    private IEnumerator AsteroidSpawnRoutine()
+    {
+        while (true)
+        {
+            var xPoses= new[] { Random.Range(-8, -6), Random.Range(6, 8) };
+            var yPoses = new[] { Random.Range(-12, -10), Random.Range(10, 12) };
+            var asteroid = Instantiate(asteroidPrefab, new Vector3(xPoses[Random.Range(0, 2)], yPoses[Random.Range(0, 2)], 0),
+                Quaternion.identity);
+            asteroid.transform.up = snake.transform.position - asteroid.transform.position;
+            yield return new WaitForSeconds(10);
         }
     }
 }

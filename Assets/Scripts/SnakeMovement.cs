@@ -15,6 +15,8 @@ public class SnakeMovement : MonoBehaviour
     [SerializeField] private Animator headAnimator;
     [SerializeField] private bool hasBitten;
     [SerializeField] private float rayLength;
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private bool justAte;
     private static readonly int Eat = Animator.StringToHash("eat");
     private static readonly int Death = Animator.StringToHash("death");
 
@@ -34,7 +36,6 @@ public class SnakeMovement : MonoBehaviour
             ChangeDirection();
             MoveSnakeBody();
         }
-        Debug.DrawRay(transform.position, transform.up * rayLength, Color.cyan);
     }
 
     private void ChangeDirection()
@@ -91,15 +92,18 @@ public class SnakeMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Food"))
+        if (other.CompareTag("Food") && !justAte)
         {
+            justAte = true;
+            StartCoroutine(FoodCooldown());
+            other.GetComponent<CircleCollider2D>().enabled = false;
             Debug.Log("Yum!");
             var snakes = GameObject.FindGameObjectsWithTag("Head");
             for (int i = 0; i < snakes.Length; i++)
             {
                 snakes[i].GetComponent<SnakeMovement>().GrowSnake();
             }
-            GameManager.foodCount--;
+            gameManager.DecreaseFoodCount();
             Destroy(other.gameObject);
         }
     }
@@ -144,6 +148,12 @@ public class SnakeMovement : MonoBehaviour
             Destroy(body);
         }
         Destroy(gameObject);
+    }
+
+    private IEnumerator FoodCooldown()
+    {
+        yield return new WaitForSeconds(0.5f);
+        justAte = false;
     }
 
     public void IsBitten()
