@@ -11,10 +11,11 @@ public class Asteroid : MonoBehaviour
     [SerializeField] private bool changedDirectionOnce;
     [SerializeField] private Animator anim;
     [SerializeField] private PolygonCollider2D polygonCollider2D;
-
+    [SerializeField] private AudioSource explosionSound;
     private void Start()
     {
         snake = GameObject.Find("Snake").GetComponent<SnakeMovement>();
+        explosionSound = GameObject.Find("ExplosionSoundPlayer").GetComponent<AudioSource>();
         movementDirection = Vector2.up;
     }
 
@@ -72,6 +73,7 @@ public class Asteroid : MonoBehaviour
     public void DestroyAsteroid()
     {
         anim.SetTrigger("death");
+        explosionSound.Play();
         asteroidImage.SetActive(false);
         polygonCollider2D.enabled = false;
         Destroy(gameObject, 1);

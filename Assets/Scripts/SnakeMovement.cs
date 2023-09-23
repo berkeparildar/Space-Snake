@@ -30,6 +30,7 @@ public class SnakeMovement : MonoBehaviour
     [SerializeField] private bool pickedCoin;
     [SerializeField] private Color[] snakeColors;
     [SerializeField] private Vector2 sourceTouchPosition;
+    [SerializeField] private AudioSource collectSound;
     private static readonly int Eat = Animator.StringToHash("eat");
     private static readonly int Death = Animator.StringToHash("death");
     [SerializeField] private bool isTouching;
@@ -124,6 +125,7 @@ public class SnakeMovement : MonoBehaviour
     {
         if (other.CompareTag("Food") && !justAte)
         {
+            collectSound.Play();
             justAte = true;
             other.GetComponent<CircleCollider2D>().enabled = false;
             StartCoroutine(FoodCooldown());
@@ -135,6 +137,7 @@ public class SnakeMovement : MonoBehaviour
         }
         else if (other.CompareTag("ShieldPowerUp") && !justGotShield)
         {
+            collectSound.Play();
             var shieldPopUp = Instantiate(shieldPopUpPrefab, transform.position, Quaternion.identity);
             Destroy(shieldPopUp, 1);
             other.GetComponent<Animator>().SetTrigger(Death);
@@ -176,6 +179,7 @@ public class SnakeMovement : MonoBehaviour
         }
         else if (other.CompareTag("Coin") && !pickedCoin)
         {
+            collectSound.Play();
             pickedCoin = true;
             other.GetComponent<Animator>().SetTrigger(Death);
             StartCoroutine(CoinPickCooldown());
@@ -184,6 +188,7 @@ public class SnakeMovement : MonoBehaviour
             coinPopUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "+" + coinAmount;
             Destroy(coinPopUp, 1);
             gameManager.IncreaseCoin(coinAmount);
+            Destroy(other.gameObject);
         }
     }
 

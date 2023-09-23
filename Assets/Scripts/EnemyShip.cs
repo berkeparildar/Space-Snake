@@ -12,11 +12,15 @@ public class EnemyShip : MonoBehaviour
     [SerializeField] private BoxCollider2D boxCollider2D;
     [SerializeField] private Transform laserSpawnPoint;
     [SerializeField] private GameObject laserContainer;
+    [SerializeField] private AudioSource laserSound;
+	[SerializeField] private AudioSource explosionSound;
     private static readonly int Death = Animator.StringToHash("death");
 
     private void Start()
     {
         isAlive = true;
+        laserSound = GameObject.Find("LaserSoundPlayer").GetComponent<AudioSource>();
+        explosionSound = GameObject.Find("ExplosionSoundPlayer").GetComponent<AudioSource>();
         laserContainer = GameObject.Find("LaserContainer");
         snake = GameObject.Find("Snake").GetComponent<SnakeMovement>();
         StartCoroutine(ShootLaserCoroutine());
@@ -56,6 +60,7 @@ public class EnemyShip : MonoBehaviour
     public void DestroyShip()
     {
         isAlive = false;
+        explosionSound.Play();
         boxCollider2D.enabled = false;
         anim.SetTrigger(Death);
         Destroy(thruster);
@@ -64,16 +69,19 @@ public class EnemyShip : MonoBehaviour
 
     private IEnumerator ShootLaserCoroutine()
     {
-        while (isAlive)
+        while (isAlive && !GameManager.GameOver)
         {
             var chanceToShoot = Random.Range(0, 2);
             if (chanceToShoot == 1)
             {
                 var shotLaser = Instantiate(laser, laserSpawnPoint.position, transform.rotation);
                 shotLaser.transform.SetParent(laserContainer.transform);
+				laserSound.Play();
             }
             yield return new WaitForSeconds(Random.Range(5, 7));
         }
+
+        yield return null;
     }
     private void DestroyIfOutOfScreen()
     {
