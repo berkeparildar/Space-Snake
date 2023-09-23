@@ -1,10 +1,10 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    
     [SerializeField] private GameObject snake;
     [SerializeField] private bool justTeleportedHorizontally;
     [SerializeField] private bool justTeleportedVertically;
@@ -12,23 +12,26 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int score;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private GameObject asteroidPrefab;
-    [SerializeField] private bool spawnedNegative;
-    public static bool gameOver;
+    [SerializeField] private GameObject spaceShipPrefab;
+    [SerializeField] private bool spawnedAsteroids;
+    [SerializeField] private bool spawnedEnemySpaceShips;
+    public static bool GameOver;
     public int foodCount = 1;
-    // Start is called before the first frame update
-    void Start()
+
+    private void Start()
     {
         snake = GameObject.Find("Snake");
         StartCoroutine(ScoreIncreaseRoutine());
-        StartCoroutine(AsteroidSpawnRoutine());
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        CheckSnakeTeleportation();
-        SpawnFood();
-        UpdateUI();
+        if (!GameOver)
+        {
+            CheckSnakeTeleportation();
+            SpawnFood();
+            UpdateUI();
+        }
     }
 
     private void CheckSnakeTeleportation()
@@ -80,9 +83,20 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator ScoreIncreaseRoutine()
     {
-        while (!gameOver)
+        while (!GameOver)
         {
             score++;
+            if (score >= 850 && !spawnedAsteroids)
+            {
+                spawnedAsteroids = true;
+                //StartCoroutine(AsteroidSpawnRoutine());
+            }
+
+            if (score >= 300 && !spawnedEnemySpaceShips)
+            {
+                spawnedEnemySpaceShips = true;
+                StartCoroutine(EnemySpawnRoutine());
+            }
             yield return new WaitForSeconds(1);
         }
     }
@@ -94,13 +108,27 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator AsteroidSpawnRoutine()
     {
-        while (true)
+        while (!GameOver)
         {
             var xPoses= new[] { Random.Range(-8, -6), Random.Range(6, 8) };
             var yPoses = new[] { Random.Range(-12, -10), Random.Range(10, 12) };
             var asteroid = Instantiate(asteroidPrefab, new Vector3(xPoses[Random.Range(0, 2)], yPoses[Random.Range(0, 2)], 0),
                 Quaternion.identity);
             asteroid.transform.up = snake.transform.position - asteroid.transform.position;
+            yield return new WaitForSeconds(10);
+        }
+        yield return null;
+    }
+
+    private IEnumerator EnemySpawnRoutine()
+    {
+        while (!GameOver)
+        {
+            var xPoses= new[] { Random.Range(-8, -6), Random.Range(6, 8) };
+            var yPoses = new[] { Random.Range(-12, -10), Random.Range(10, 12) };
+            var ship = Instantiate(spaceShipPrefab, new Vector3(xPoses[Random.Range(0, 2)], yPoses[Random.Range(0, 2)], 0),
+                Quaternion.identity);
+            ship.transform.up = snake.transform.position - ship.transform.position;
             yield return new WaitForSeconds(10);
         }
     }

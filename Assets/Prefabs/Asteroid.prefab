@@ -49,6 +49,7 @@ MonoBehaviour:
   rotationSpeed: 30
   speed: 1
   asteroidImage: {fileID: 8024986617782841144}
+  snake: {fileID: 0}
 --- !u!60 &3034245672983540342
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -78,7 +79,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}

@@ -25,21 +25,19 @@ public class SnakeMovement : MonoBehaviour
         SnakeInitialization();
     }
 
-    // Update is called once per frame
-   
     private void FixedUpdate()
     {
         inputDirection = Input.GetAxis("Horizontal");
-        transform.Translate(Vector2.up * (speed * Time.deltaTime));
         if (!hasBitten)
         {
-            ChangeDirection();
+            MoveSnakeHead();
             MoveSnakeBody();
         }
     }
 
-    private void ChangeDirection()
+    private void MoveSnakeHead()
     {
+        transform.Translate(Vector2.up * (speed * Time.deltaTime));
         transform.Rotate(transform.forward * (inputDirection * rotationSpeed * Time.deltaTime));
     }
 
@@ -51,7 +49,6 @@ public class SnakeMovement : MonoBehaviour
         {
             if (body.CompareTag("Tail") && destinations.Count - 1 < destinationIndex * gap)
             {
-                
             }
             else
             {
@@ -61,7 +58,7 @@ public class SnakeMovement : MonoBehaviour
                 destinationIndex++;
             }
         }
-        
+
         while (destinations.Count > snakeBody.Count * gap)
         {
             destinations.RemoveAt(destinations.Count - 1);
@@ -70,23 +67,16 @@ public class SnakeMovement : MonoBehaviour
 
     private void GrowSnake()
     {
-        var spawnPosition = Vector3.zero;
-        if (snakeBody.Count == 1)
-        {
-            spawnPosition = snakeBody[snakeBody.Count - 1].transform.position;
-        }
-        else
-        {
-            spawnPosition = snakeBody[snakeBody.Count - 2].transform.position;
-        }
-        GameObject body = Instantiate(bodyPrefab, spawnPosition, transform.rotation);
+        var snakeBodyCount = snakeBody.Count;
+        var spawnPosition = snakeBody[snakeBodyCount - 2].transform.position;
+        var body = Instantiate(bodyPrefab, spawnPosition, transform.rotation);
         snakeBody.Insert(snakeBody.Count - 1, body);
         StartCoroutine(EatAnimationCoroutine());
     }
 
     private void AddTail()
     {
-        GameObject tail = Instantiate(tailPrefab);
+        var tail = Instantiate(tailPrefab);
         snakeBody.Add(tail);
     }
 
@@ -98,11 +88,7 @@ public class SnakeMovement : MonoBehaviour
             StartCoroutine(FoodCooldown());
             other.GetComponent<CircleCollider2D>().enabled = false;
             Debug.Log("Yum!");
-            var snakes = GameObject.FindGameObjectsWithTag("Head");
-            for (int i = 0; i < snakes.Length; i++)
-            {
-                snakes[i].GetComponent<SnakeMovement>().GrowSnake();
-            }
+            GrowSnake();
             gameManager.DecreaseFoodCount();
             Destroy(other.gameObject);
         }
@@ -132,14 +118,11 @@ public class SnakeMovement : MonoBehaviour
     {
         headAnimator.SetTrigger(Death);
         yield return new WaitForSeconds(0.1f);
-        for (int i = 0; i < snakeBody.Count - 1; i++)
+        foreach (var body in snakeBody)
         {
-            if (!snakeBody[i].CompareTag("Tail"))
-            {
-                var bodyAnim = snakeBody[i].GetComponent<Animator>();
-                bodyAnim.SetTrigger(Death);
-                yield return new WaitForSeconds(0.1f);
-            }
+            var bodyAnim = body.GetComponent<Animator>();
+            bodyAnim.SetTrigger(Death);
+            yield return new WaitForSeconds(0.1f);
         }
 
         yield return new WaitForSeconds(0.4f * snakeBody.Count);
@@ -147,6 +130,7 @@ public class SnakeMovement : MonoBehaviour
         {
             Destroy(body);
         }
+
         Destroy(gameObject);
     }
 
@@ -159,6 +143,19 @@ public class SnakeMovement : MonoBehaviour
     public void IsBitten()
     {
         hasBitten = true;
+        GameManager.GameOver = true;
         StartCoroutine(DeathCoroutine());
+    }
+
+    public IEnumerator CutSnakeAtPoint(GameObject hitBody)
+    {
+        var hitBodyIndex = snakeBody.IndexOf(hitBody);
+        for (var i = hitBodyIndex; i < snakeBody.Count - 1; i++)
+        {
+            var bodyAnim = snakeBody[i].GetComponent<Animator>();
+            bodyAnim.SetTrigger(Death);
+            yield return new WaitForSeconds(0.1f);
+            snakeBody.RemoveAt(i);
+        }
     }
 }
