@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 445027302776888528}
   - component: {fileID: 6871440960355112186}
   - component: {fileID: 5739142730532612511}
+  - component: {fileID: -2611485689753950154}
   m_Layer: 0
   m_Name: Laser
   m_TagString: Untagged
@@ -145,3 +146,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 1.5
   snake: {fileID: 0}
+  spawnTime: 0
+--- !u!50 &-2611485689753950154
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6400177775706865282}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

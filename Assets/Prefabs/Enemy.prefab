@@ -117,9 +117,10 @@ GameObject:
   - component: {fileID: 2327505258943980004}
   - component: {fileID: 1028000167354318071}
   - component: {fileID: 7139512381923595176}
+  - component: {fileID: 6842229365926324995}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -134,7 +135,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2195206237130207812}
@@ -202,9 +203,39 @@ MonoBehaviour:
   speed: 0.5
   snake: {fileID: 0}
   anim: {fileID: 4193858068304026273}
+  thruster: {fileID: 6705688079596602631}
   isAlive: 0
   laser: {fileID: 6400177775706865282, guid: b1f17775927f8b646b063cf877d36016, type: 3}
+  boxCollider2D: {fileID: 1028000167354318071}
   laserSpawnPoint: {fileID: 2694332240819778798}
+  laserContainer: {fileID: 0}
+--- !u!50 &6842229365926324995
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6100929600321360330}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &6451603898676682992
 GameObject:
   m_ObjectHideFlags: 0
@@ -230,7 +261,7 @@ Transform:
   m_GameObject: {fileID: 6451603898676682992}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.35, z: 0}
+  m_LocalPosition: {x: 0, y: 1.12, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

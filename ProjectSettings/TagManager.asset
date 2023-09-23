@@ -8,6 +8,11 @@ TagManager:
   - Tail
   - Body
   - Head
+  - Enemy
+  - Asteroid
+  - Shield
+  - ShieldPowerUp
+  - Coin
   layers:
   - Default
   - TransparentFX
