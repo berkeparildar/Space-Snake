@@ -1,6 +1,6 @@
-[![Badge 1](media/pf.png)](https://berkeparildar.github.io/)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-[![Badge 2](media/ty.png)](https://youtu.be/AqxnFYLENnA)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-[![Badge 3](media/gp.png)](https://play.google.com/store/apps/details?id=com.bprldr.spacesnake)
+[![Badge 1](media/pf.png)](https://berkeparildar.github.io/){:target="_blank"}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+[![Badge 2](media/ty.png)](https://youtu.be/AqxnFYLENnA){:target="_blank"}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+[![Badge 3](media/gp.png)](https://play.google.com/store/apps/details?id=com.bprldr.spacesnake){:target="_blank"}
 # Space Snake
 Space Snake is a classic snake game with a cosmic twist. In this thrilling game, players control a small snake in the center of the screen, maneuvering it through a space filled with challenges and opportunities. Collect energy sources to grow your snake and gather coins to earn rewards. The cosmic environment is full of perilous obstacles, including hostile spaceships and menacing asteroids.
 
