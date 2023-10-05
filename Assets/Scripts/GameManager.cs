@@ -68,17 +68,34 @@ public class GameManager : MonoBehaviour
     private void CheckSnakeTeleportation()
     {
         var currentSnakePos = snake.transform.position;
-        if (snake.transform.position.x is >= 6 or <= -6 && !justTeleportedHorizontally)
+        var mainCamera = Camera.main;
+        var topBoundary = new Vector3(0, Screen.height, 0);
+        var bottomBoundary = new Vector3(0, 0, 0);
+        var rightBoundary = new Vector3(Screen.width, Screen.height * 0.5f, 0);
+        var leftBoundary = new Vector3(0, Screen.height * 0.5f, 0);
+        topBoundary = mainCamera.ScreenToWorldPoint(topBoundary);
+        bottomBoundary = mainCamera.ScreenToWorldPoint(bottomBoundary);
+        rightBoundary = mainCamera.ScreenToWorldPoint(rightBoundary);
+        leftBoundary = mainCamera.ScreenToWorldPoint(leftBoundary);
+
+        if ((currentSnakePos.x >= rightBoundary.x || currentSnakePos.x <= leftBoundary.x) && !justTeleportedHorizontally)
         {
             justTeleportedHorizontally = true;
-            snake.transform.position = new Vector3(-currentSnakePos.x, currentSnakePos.y, 0);
+            var newX = -currentSnakePos.x;
+            newX = Mathf.Clamp(newX, leftBoundary.x, rightBoundary.x);
+            snake.transform.position = new Vector3(newX, currentSnakePos.y, 0);
             StartCoroutine(TeleportCooldown(true));
         }
-        else if (snake.transform.position.y is >= 10.38f or <= -10.38f && !justTeleportedVertically)
+        else
         {
-            justTeleportedVertically = true;
-            snake.transform.position = new Vector3(currentSnakePos.x, -currentSnakePos.y, 0);
-            StartCoroutine(TeleportCooldown(false));
+            var newY = -currentSnakePos.y;
+            if ((currentSnakePos.y >= topBoundary.y || currentSnakePos.y <= bottomBoundary.y) && !justTeleportedVertically)
+            {
+                justTeleportedVertically = true;
+                newY = Mathf.Clamp(newY, bottomBoundary.y, topBoundary.y);
+                snake.transform.position = new Vector3(currentSnakePos.x, newY, 0);
+                StartCoroutine(TeleportCooldown(false));
+            }
         }
     }
 
